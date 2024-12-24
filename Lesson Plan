@@ -1,0 +1,61 @@
+from langchain.prompts import PromptTemplate
+from langchain.llms import OpenAI
+
+import os
+os.environ["OPENAI_API_KEY"] = "-"
+
+# 1. Prompt Template: Lesson Plan Creating
+
+lesson_plan_prompt=PromptTemplate(
+    input_variables=["topic"],
+    template=(
+        "You are an education expert. Create a detailed lesson plan for the topic: '{topic}'. "
+        "Include them: \n"
+        "- Learning aims\n"
+        "- Key concepts to cover\n"
+        "- Activities to do\n"
+        "- Assessment methods"
+    )
+)
+
+exam_question_prompt=PromptTemplate(
+    input_variables=["topic"],
+    template=(
+        "Suggest 3 books, 3 websites, and 2 tools or applications for learning more about the topic: '{topic}'."
+    )
+
+    )
+
+resources_prompt= PromptTemplate(
+    input_variables=["topic"],
+    template=(
+    "Suggest 3 books, 3 websites, and 2 tools or applications for learning more about the topic: '{topic}'."
+    
+    )
+)
+
+    
+# LLM Tanımlama
+llm=OpenAI(temperature=0.7)
+
+def generate_lesson_plan(topic):
+  prompt=lesson_plan_prompt.format(topic=topic)
+  return llm(prompt)
+
+def generate_exam_questions(topic):
+  prompt= exam_question_prompt.format(topic=topic)
+  return llm(prompt)
+
+def suggest_resources(topic):
+  prompt= resources_prompt.format(topic=topic)
+  return llm(prompt)
+
+topic=input("Enter the topic: ").strip()
+print("Lesson Plan")
+print(generate_lesson_plan(topic))
+
+print("Exam Questions")
+print(generate_exam_questions(topic))
+
+print("Resource and Suggestions")
+print(suggest_resources(topic))
